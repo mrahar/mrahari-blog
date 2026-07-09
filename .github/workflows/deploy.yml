@@ -27,6 +27,9 @@ jobs:
       - name: Build site
         run: npx quartz build
 
+      - name: Add .htaccess to build output
+        run: cp deploy/.htaccess public/.htaccess
+
       - name: Upload public/ to shared host via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
