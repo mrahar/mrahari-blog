@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate .quartz/ plugins from config
-        run: npm run install-plugins
+      - name: Install Quartz plugins (generates .quartz/plugins)
+        run: npx quartz plugin install
 
       - name: Build site
         run: npx quartz build
