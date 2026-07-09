@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: FTP_SERVER # secrets live in this environment, not repo-level
     steps:
       - uses: actions/checkout@v4
         with:
