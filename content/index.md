@@ -1,6 +1,10 @@
 ---
-title: Welcome to Quartz
+title: سلام، من محمدرضام 👋
 ---
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+به **باغچه‌ی دیجیتال** من خوش اومدی 🌱
+
+اینجا جاییه که یادداشت‌هام رو می‌کارم و بهشون سر می‌زنم تا رشد کنن — از فروش آنلاین و مارکت‌پلیس‌ها تا ذهن دوم و چیزهایی که هر روز یاد می‌گیرم.
+
+> [!info] این باغچه تازه کاشته شده
+> اولین نت‌ها به‌زودی سبز می‌شن. 🌿

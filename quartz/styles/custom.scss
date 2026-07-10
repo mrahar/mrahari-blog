@@ -1,3 +1,165 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+/* ============================================================
+   Baran brand — mrahari.com
+   RTL/Persian base adapted from eledah/quartz (MIT),
+   brand signatures per brandbook v3 (locked 1405/04/19)
+   ============================================================ */
+
+/* ---------- 1. base font ---------- */
+html {
+  font-family: Vazirmatn, Tahoma, sans-serif !important;
+}
+
+/* ---------- 2. RTL fixes ---------- */
+.breadcrumb-element p {
+  margin: 0 0.5rem 0 0;
+  padding: 0;
+  line-height: normal;
+}
+
+button#explorer .fold {
+  opacity: 0.8;
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+  transition: transform 0.3s;
+}
+
+.content-meta[show-comma="true"] > span:not(:last-child) {
+  margin-left: 8px !important;
+  margin-right: 0px !important;
+}
+
+.tags {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.folder-icon {
+  margin-right: 0px !important;
+  margin-left: 5px !important;
+}
+
+#explorer-content ul {
+  padding-right: 0.7rem !important;
+  padding-left: 0px !important;
+}
+
+#toc-content .depth-1 {
+  padding: 0px !important;
+  padding-right: 1rem !important;
+}
+
+#toc-content .depth-2 {
+  padding: 0px !important;
+  padding-right: 2rem !important;
+}
+
+#toc-content .depth-3 {
+  padding: 0px !important;
+  padding-right: 3rem !important;
+}
+
+li:has(> .folder-outer:not(.open)) > .folder-container > svg {
+  transform: rotate(90deg) !important;
+}
+
+div.search.mobile-only {
+  padding-right: 10px !important;
+}
+
+/* code is always LTR */
+code {
+  direction: ltr !important;
+}
+
+pre {
+  direction: ltr;
+  text-align: left;
+}
+
+/* localized footnote label */
+h2#footnote-label {
+  visibility: hidden;
+}
+
+h2#footnote-label::after {
+  content: "پانوشت‌ها";
+  visibility: visible;
+  display: block;
+}
+
+/* blockquote: border on the right for RTL */
+blockquote {
+  border-right: 3px solid var(--secondary);
+  border-left: none;
+  margin: 1rem 0;
+  padding-right: 1rem;
+  padding-left: 0;
+  transition: border-color 0.2s;
+}
+
+/* explorer RTL overrides (mobile) */
+@media all and ($mobile) {
+  html[dir="rtl"] .page > #quartz-body.lock-scroll > :not(.sidebar.left:has(.explorer)) {
+    transform: translateX(-100dvw);
+  }
+
+  html[dir="rtl"] .explorer {
+    &.collapsed > .explorer-content {
+      transform: translateX(100vw);
+      visibility: hidden;
+    }
+
+    &:not(.collapsed) > .explorer-content {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .explorer-content {
+      left: auto;
+      right: 0;
+      transform: translateX(100vw);
+    }
+  }
+}
+
+/* ---------- 3. Baran brand signatures ---------- */
+
+/* links: soft blue underline, wavy on hover (the "water ripple") */
+article a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--tertiary) 45%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+article a:hover {
+  text-decoration-style: wavy;
+  text-decoration-color: var(--tertiary);
+}
+
+/* article title: short accent bar underneath (brandbook typography) */
+.article-title::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--tertiary);
+  margin-top: 8px;
+}
+
+/* headings: heavy weight per brandbook */
+h1,
+h2,
+h3,
+.article-title {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+/* reading comfort: line-height 2 for long-form Persian */
+article p {
+  line-height: 2;
+}

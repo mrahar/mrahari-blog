@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Quartz 5
+  pageTitle: محمدرضا آهاری
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
   analytics:
     provider: plausible
-  locale: en-US
+  locale: fa-IR
   baseUrl: mrahari.com
   ignorePatterns:
     - private
@@ -16,30 +16,32 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Schibsted Grotesk
-      body: Source Sans Pro
-      code: IBM Plex Mono
+      header: Vazirmatn
+      body: Vazirmatn
+      code: JetBrains Mono
     colors:
+      # Baran brand palette — light mode: "after the rain"
       lightMode:
-        light: "#faf8f8"
-        lightgray: "#e5e5e5"
-        gray: "#b8b8b8"
-        darkgray: "#4e4e4e"
-        dark: "#2b2b2b"
-        secondary: "#284b63"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#fff23688"
+        light: "#F7FAFC"
+        lightgray: "#DCE7F0"
+        gray: "#52708C"
+        darkgray: "#22405C"
+        dark: "#0F2A43"
+        secondary: "#0A72BD"
+        tertiary: "#2FA8E0"
+        highlight: rgba(47, 168, 224, 0.1)
+        textHighlight: rgba(47, 168, 224, 0.3)
+      # Baran brand palette — dark mode: "rainy night"
       darkMode:
-        light: "#161618"
-        lightgray: "#393639"
-        gray: "#646464"
-        darkgray: "#d4d4d4"
-        dark: "#ebebec"
-        secondary: "#7b97aa"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#b3aa0288"
+        light: "#0A1622"
+        lightgray: "#1D3349"
+        gray: "#93AECA"
+        darkgray: "#C9D9E8"
+        dark: "#E8F1F8"
+        secondary: "#6BC4F5"
+        tertiary: "#8ED4F8"
+        highlight: rgba(107, 196, 245, 0.1)
+        textHighlight: rgba(107, 196, 245, 0.3)
 plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true
@@ -74,6 +76,9 @@ plugins:
       enableVideoEmbed: true
       enableCheckbox: true
     order: 30
+  - source: ./plugins/bidi-text
+    enabled: true
+    order: 35
   - source: github:quartz-community/github-flavored-markdown
     enabled: true
     order: 40
