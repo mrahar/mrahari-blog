@@ -1,0 +1,41 @@
+name: Deploy Quartz to blog.mrahari.com
+
+on:
+  push:
+    branches: [v5]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: FTP_SERVER # same environment as main deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Quartz plugins (generates .quartz/plugins)
+        run: npx quartz plugin install
+
+      - name: Build site
+        run: npx quartz build
+
+      - name: Add .htaccess to build output
+        run: cp deploy/.htaccess public/.htaccess
+
+      - name: Upload to blog.mrahari.com via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public/
+          server-dir: blog/
+          state-name: .ftp-deploy-sync-state-blog.json
