@@ -436,11 +436,14 @@ a.hero-btn.ghost {
 
 /* ---------- 3.8 layout fixes ---------- */
 
-/* right sidebar (graph/TOC/backlinks): allow internal scroll instead of overflowing viewport */
-.page > #quartz-body .sidebar.right {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
+/* right sidebar (graph/TOC/backlinks): allow internal scroll on desktop only */
+/* mobile: no overflow trap — page scroll must remain free */
+@media all and (min-width: 801px) {
+  .page > #quartz-body .sidebar.right {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
 }
 
 /* footer: centered, only "ساخته شده با Quartz" (hide hardcoded © year via font-size trick) */
