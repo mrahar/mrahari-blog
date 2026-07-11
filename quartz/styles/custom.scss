@@ -153,6 +153,13 @@ div.search.mobile-only {
   padding-right: 10px !important;
 }
 
+/* hide "جستجو" label on mobile — icon alone is enough */
+@media all and (max-width: 800px) {
+  button.search-button > p {
+    display: none;
+  }
+}
+
 /* code is always LTR */
 code {
   direction: ltr !important;
