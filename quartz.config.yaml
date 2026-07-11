@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: fa-IR
-  baseUrl: mrahari.com
+  baseUrl: blog.mrahari.com
   ignorePatterns:
     - private
     - templates
