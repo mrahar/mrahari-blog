@@ -232,6 +232,9 @@ plugins:
       group: toolbar
   - source: github:quartz-community/breadcrumbs
     enabled: true
+    options:
+      rootName: خانه
+      spacerSymbol: "❯"
     layout:
       position: beforeBody
       priority: 5

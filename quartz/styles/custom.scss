@@ -469,6 +469,51 @@ footer > ul {
   display: none;
 }
 
+/* ---------- 3.9 Baran tags / chips ---------- */
+
+/* tag pills used in article meta and tag pages */
+.tag-link,
+a.tag-link,
+.tags a,
+.tags > li > a {
+  display: inline-block;
+  padding: 0.18em 0.65em;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  background: rgba(10, 114, 189, 0.1);
+  color: var(--secondary) !important;
+  border: 1px solid rgba(10, 114, 189, 0.22);
+  transition: background 0.15s, border-color 0.15s;
+  margin: 0 0.15rem 0.15rem 0;
+}
+
+.tag-link:hover,
+a.tag-link:hover,
+.tags a:hover {
+  background: rgba(10, 114, 189, 0.18);
+  border-color: var(--secondary);
+  text-decoration: none !important;
+}
+
+/* dark mode tags */
+:root[saved-theme="dark"] .tag-link,
+:root[saved-theme="dark"] a.tag-link,
+:root[saved-theme="dark"] .tags a,
+:root[saved-theme="dark"] .tags > li > a {
+  background: rgba(107, 196, 245, 0.1);
+  color: var(--secondary) !important;
+  border-color: rgba(107, 196, 245, 0.22);
+}
+
+:root[saved-theme="dark"] .tag-link:hover,
+:root[saved-theme="dark"] a.tag-link:hover,
+:root[saved-theme="dark"] .tags a:hover {
+  background: rgba(107, 196, 245, 0.18);
+  border-color: var(--secondary);
+}
+
 /* ---------- 4. Homepage hero gradient (index page only) ---------- */
 body[data-slug="index"] .center .page-header {
   position: relative;
