@@ -6,6 +6,91 @@
    brand signatures per brandbook v3 (locked 1405/04/19)
    ============================================================ */
 
+/* ---------- 0. Baran color enforcement (unlayered — beats resource-style overrides) ---------- */
+/*
+  Some Quartz plugins load resource-style CSS (unlayered, after index.css)
+  that resets --secondary via --accent-h:258 (purple). We override here with
+  !important so the Baran blue palette always wins regardless of load order.
+*/
+:root {
+  /* accent */
+  --accent-h: 205 !important;
+  --accent-s: 90% !important;
+  --accent-l: 39% !important;
+  --color-accent:   #0a72bd !important;
+  --color-accent-1: #0a72bd !important;
+  --color-accent-2: #2fa8e0 !important;
+  --secondary:      #0a72bd !important;
+  --tertiary:       #2fa8e0 !important;
+  --link-color:     #0a72bd !important;
+  /* Baran neutrals — "after the rain" */
+  --light:     #f7fafc !important;
+  --lightgray: #dce7f0 !important;
+  --gray:      #52708c !important;
+  --darkgray:  #22405c !important;
+  --dark:      #0f2a43 !important;
+  --highlight:     rgba(47, 168, 224, 0.1) !important;
+  --textHighlight: rgba(47, 168, 224, 0.3) !important;
+  /* plugin resource-styles hardcode these neutral grays — remap to Baran */
+  --color-base-00:  #f7fafc !important;
+  --color-base-05:  #f2f7fb !important;
+  --color-base-10:  #ecf3f9 !important;
+  --color-base-20:  #e4eef6 !important;
+  --color-base-25:  #dce7f0 !important;
+  --color-base-30:  #cbdae8 !important;
+  --color-base-35:  #b3c9dc !important;
+  --color-base-40:  #8aa7c2 !important;
+  --color-base-50:  #52708c !important;
+  --color-base-60:  #3d5a77 !important;
+  --color-base-70:  #22405c !important;
+  --color-base-100: #0f2a43 !important;
+  --background-primary:     #f7fafc !important;
+  --background-primary-alt: #ecf3f9 !important;
+  --background-secondary:   #e4eef6 !important;
+}
+
+:root[saved-theme="dark"] {
+  /* accent */
+  --accent-h: 201 !important;
+  --accent-s: 87% !important;
+  --accent-l: 69% !important;
+  --color-accent:   #6bc4f5 !important;
+  --color-accent-1: #6bc4f5 !important;
+  --color-accent-2: #8ed4f8 !important;
+  --secondary:      #6bc4f5 !important;
+  --tertiary:       #8ed4f8 !important;
+  --link-color:     #6bc4f5 !important;
+  /* Baran neutrals — "rainy night" (deep navy, NOT neutral black) */
+  --light:     #0a1622 !important;
+  --lightgray: #1d3349 !important;
+  --gray:      #93aeca !important;
+  --darkgray:  #c9d9e8 !important;
+  --dark:      #e8f1f8 !important;
+  --highlight:     rgba(107, 196, 245, 0.1) !important;
+  --textHighlight: rgba(107, 196, 245, 0.3) !important;
+  /* plugin resource-styles hardcode these neutral grays — remap to Baran */
+  --color-base-00:  #0a1622 !important;
+  --color-base-05:  #0e1c2b !important;
+  --color-base-10:  #122233 !important;
+  --color-base-20:  #16293c !important;
+  --color-base-25:  #1d3349 !important;
+  --color-base-30:  #24405a !important;
+  --color-base-35:  #2e4d6a !important;
+  --color-base-40:  #446686 !important;
+  --color-base-50:  #6889ab !important;
+  --color-base-60:  #93aeca !important;
+  --color-base-70:  #c9d9e8 !important;
+  --color-base-100: #e8f1f8 !important;
+  --background-primary:     #0a1622 !important;
+  --background-primary-alt: #122233 !important;
+  --background-secondary:   #16293c !important;
+}
+
+/* body backgrounds follow the palette even if a plugin re-declares them */
+body {
+  background-color: var(--light) !important;
+}
+
 /* ---------- 1. base font ---------- */
 html {
   font-family: Vazirmatn, Tahoma, sans-serif !important;
@@ -78,6 +163,19 @@ pre {
   text-align: left;
 }
 
+/* footnotes: force RTL (bidi plugin misses them) */
+.footnotes,
+section[data-footnotes] {
+  direction: rtl;
+  text-align: right;
+}
+
+.footnotes ol,
+section[data-footnotes] ol {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
 /* localized footnote label */
 h2#footnote-label {
   visibility: hidden;
@@ -89,14 +187,28 @@ h2#footnote-label::after {
   display: block;
 }
 
-/* blockquote: border on the right for RTL */
-blockquote {
-  border-right: 3px solid var(--secondary);
+/* blockquote (non-callout): Baran quote pill — rounded tint + droplet dot */
+blockquote:not(.callout) {
+  position: relative;
+  background: var(--highlight);
+  border: none;
   border-left: none;
-  margin: 1rem 0;
-  padding-right: 1rem;
-  padding-left: 0;
-  transition: border-color 0.2s;
+  border-right: none;
+  border-radius: 16px;
+  margin: 1.5rem 0;
+  padding: 0.85rem 2.9rem 0.85rem 1.4rem;
+}
+
+blockquote:not(.callout)::before {
+  content: "";
+  position: absolute;
+  right: 1.2rem;
+  top: 1.35rem;
+  width: 11px;
+  height: 11px;
+  background: var(--tertiary);
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
 }
 
 /* explorer RTL overrides (mobile) */
@@ -126,6 +238,24 @@ blockquote {
 
 /* ---------- 3. Baran brand signatures ---------- */
 
+/* site title: brand-weight + blue period (brandbook: «محمدرضا آهاری.») */
+.page-title {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  font-size: 1.3rem;
+}
+
+.page-title a {
+  color: var(--dark) !important;
+  text-decoration: none !important;
+}
+
+.page-title a::after {
+  content: ".";
+  color: var(--tertiary);
+  font-weight: 900;
+}
+
 /* links: soft blue underline, wavy on hover (the "water ripple") */
 article a {
   text-decoration: underline;
@@ -139,15 +269,16 @@ article a:hover {
   text-decoration-color: var(--tertiary);
 }
 
-/* article title: short accent bar underneath (brandbook typography) */
+/* article title: accent bar underneath — visible blue stripe */
 .article-title::after {
   content: "";
   display: block;
-  width: 52px;
-  height: 4px;
-  border-radius: 4px;
-  background: var(--tertiary);
-  margin-top: 8px;
+  width: 64px;
+  height: 5px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--secondary), var(--tertiary));
+  margin-top: 10px;
+  margin-bottom: 4px;
 }
 
 /* headings: heavy weight per brandbook */
@@ -162,4 +293,229 @@ h3,
 /* reading comfort: line-height 2 for long-form Persian */
 article p {
   line-height: 2;
+}
+
+/* ---------- 3.5 Baran design language: soft rounded, navy tints ---------- */
+
+/* callouts: rounded soft card, Baran blue by default (like brandbook quote pill) */
+.callout {
+  border-radius: 16px !important;
+  padding: 0.25rem 1.25rem !important;
+  border: 1px solid var(--lightgray) !important;
+  border-right: 1px solid var(--lightgray) !important;
+}
+
+.callout[data-callout],
+.callout[data-callout="note"],
+.callout[data-callout="info"],
+.callout[data-callout="abstract"],
+.callout[data-callout="todo"] {
+  --color: var(--secondary);
+  --border: var(--lightgray);
+  --bg: var(--highlight);
+}
+
+/* code blocks: rounded, tinted */
+pre {
+  border-radius: 12px !important;
+  border: 1px solid var(--lightgray) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+code {
+  border-radius: 8px;
+}
+
+/* inline meta (date / reading time): mono style per brandbook meta line */
+.content-meta {
+  font-family: var(--codeFont);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+}
+
+/* search bar: rounded pill */
+.search button.search-button {
+  border-radius: 12px;
+  border: 1px solid var(--lightgray);
+  background-color: var(--background-primary-alt, var(--light));
+}
+
+/* images and embeds: same radius family */
+img,
+video {
+  border-radius: 12px;
+}
+
+/* ---------- 3.6 Baran signature: droplet everywhere ---------- */
+
+/* droplet bullets for unordered lists (brandbook: قطره به‌جای بولت) */
+article ul > li {
+  list-style: none;
+  position: relative;
+}
+
+article ul > li::before {
+  content: "";
+  position: absolute;
+  right: -1.15rem;
+  top: 0.72em;
+  width: 7px;
+  height: 7px;
+  background: var(--secondary);
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+}
+
+/* nested list: lighter droplet */
+article ul ul > li::before {
+  background: var(--tertiary);
+  width: 6px;
+  height: 6px;
+}
+
+/* task-list items keep their checkbox, no droplet */
+article ul > li:has(> input[type="checkbox"]) {
+  list-style: none;
+}
+
+article ul > li:has(> input[type="checkbox"])::before {
+  content: none;
+}
+
+/* section headings: droplet marker before text (brandbook signature) */
+article h2::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 10px;
+  background: var(--tertiary);
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+}
+
+/* ---------- 3.7 hero buttons (brandbook pills) ---------- */
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.4rem 0;
+}
+
+a.hero-btn {
+  display: inline-block;
+  border-radius: 12px;
+  padding: 0.55rem 1.6rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  line-height: 1.8;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+a.hero-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+  text-decoration: none !important;
+}
+
+a.hero-btn.primary {
+  background: var(--secondary);
+  color: var(--light) !important;
+}
+
+:root[saved-theme="dark"] a.hero-btn.primary {
+  background: #2e86c9;
+  color: #f7fafc !important;
+}
+
+a.hero-btn.ghost {
+  border: 1.5px solid var(--secondary);
+  color: var(--secondary) !important;
+  background: transparent;
+}
+
+/* ---------- 3.8 layout fixes ---------- */
+
+/* right sidebar (graph/TOC/backlinks): allow internal scroll instead of overflowing viewport */
+.page > #quartz-body .sidebar.right {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* footer: centered, only "ساخته شده با Quartz" (hide hardcoded © year via font-size trick) */
+footer {
+  text-align: center !important;
+  width: 100%;
+  margin: 2rem auto 1rem !important;
+}
+
+footer > p {
+  font-size: 0;
+  margin: 0;
+}
+
+footer > p::before {
+  content: "ساخته شده با ";
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+footer > p a {
+  font-size: 0.85rem;
+}
+
+footer > ul {
+  display: none;
+}
+
+/* ---------- 4. Homepage hero gradient (index page only) ---------- */
+body[data-slug="index"] .center .page-header {
+  position: relative;
+  padding: 2.4rem 2.2rem 1.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(47, 168, 224, 0.18);
+  background: linear-gradient(
+    160deg,
+    rgba(47, 168, 224, 0.2) 0%,
+    rgba(10, 114, 189, 0.1) 50%,
+    rgba(47, 168, 224, 0.04) 100%
+  );
+  overflow: hidden;
+}
+
+body[data-slug="index"] .center .page-header::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(47, 168, 224, 0.28) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+/* dark mode: rainy-night blue glow */
+:root[saved-theme="dark"] body[data-slug="index"] .center .page-header {
+  border-color: rgba(107, 196, 245, 0.2);
+  background: linear-gradient(
+    160deg,
+    rgba(46, 134, 201, 0.28) 0%,
+    rgba(15, 76, 129, 0.18) 50%,
+    rgba(107, 196, 245, 0.05) 100%
+  );
+}
+
+:root[saved-theme="dark"] body[data-slug="index"] .center .page-header::before {
+  background: radial-gradient(
+    circle,
+    rgba(107, 196, 245, 0.22) 0%,
+    transparent 65%
+  );
 }

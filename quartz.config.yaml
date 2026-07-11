@@ -115,6 +115,24 @@ plugins:
     order: 92
   - source: github:quartz-community/fonts
     enabled: true
+    options:
+      useThemeFonts: false
+      fontOrigin: googleFonts
+      title:
+        name: Vazirmatn
+        weights: [400, 700, 900]
+      header:
+        name: Vazirmatn
+        weights: [400, 700, 900]
+      body:
+        name: Vazirmatn
+        weights: [400, 700]
+      interface:
+        name: Vazirmatn
+        weights: [400, 700]
+      code:
+        name: JetBrains Mono
+        weights: [400, 600]
   - source: github:quartz-community/remove-draft
     enabled: true
   - source: github:quartz-community/explicit-publish
@@ -229,9 +247,7 @@ plugins:
   - source: github:quartz-community/footer
     enabled: true
     options:
-      links:
-        GitHub: https://github.com/jackyzha0/quartz
-        Discord Community: https://discord.gg/cRFFHYye7t
+      links: {}
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer
@@ -255,7 +271,7 @@ plugins:
         - tags
         - aliases
       excludedProperties: []
-      hidePropertiesView: false
+      hidePropertiesView: true
       delimiters: ---
       language: yaml
     order: 5
@@ -267,7 +283,7 @@ plugins:
       name: quartz-themes
       repo: github:saberzero1/quartz-themes
       subdir: plugin
-    enabled: true
+    enabled: false
     options:
       theme: default
   - source: github:quartz-community/obsidian-plugin-excalidraw
