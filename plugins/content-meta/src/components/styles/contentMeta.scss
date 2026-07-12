@@ -1,0 +1,109 @@
+// `p.content-meta` (element + class) beats a stray global `.content-meta`
+// rule in custom.scss that otherwise forces the code font.
+p.content-meta {
+  margin-top: 0.6rem;
+  margin-bottom: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 0.35rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.42rem 0.85rem;
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--secondary) 7%, var(--light));
+  border: 1px solid color-mix(in srgb, var(--secondary) 16%, transparent);
+  font-family: var(--bodyFont);
+  font-size: 0.78rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  color: var(--darkgray);
+
+  // every item shares the same padding so the boxes are identical in size,
+  // and the standalone separator sits symmetrically between them.
+  .cm-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+    cursor: help;
+    color: inherit;
+    padding: 0.12rem 0.32rem;
+    border-radius: 0.4rem;
+  }
+
+  // standalone dot separator (its own element, never inside a badge box)
+  .cm-sep {
+    color: color-mix(in srgb, var(--gray) 55%, transparent);
+    user-select: none;
+  }
+
+  // clickable badges (status / planted / watered) — neutralize the global
+  // `a`/`a.internal` styling so they read exactly like the plain items.
+  a.cm-item {
+    cursor: pointer;
+    color: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-decoration: none;
+    background-color: transparent;
+    background-image: none;
+    transition:
+      color 0.12s ease,
+      background-color 0.12s ease;
+
+    &:hover {
+      color: var(--secondary);
+      background-color: color-mix(in srgb, var(--secondary) 13%, transparent);
+    }
+
+    .cm-text {
+      text-decoration: none;
+    }
+  }
+
+  .cm-item {
+
+    // hover tooltip (reliable, unlike the native title attribute)
+    &[data-tip]:hover::before,
+    &[data-tip]:focus-visible::before {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 0.5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      padding: 0.32rem 0.6rem;
+      border-radius: 0.45rem;
+      background: var(--dark);
+      color: var(--light);
+      font-family: var(--bodyFont);
+      font-size: 0.72rem;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+      white-space: normal;
+      width: max-content;
+      max-width: min(72vw, 250px);
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+      pointer-events: none;
+    }
+  }
+
+  .cm-emoji {
+    font-size: 0.98em;
+    line-height: 1;
+    unicode-bidi: isolate;
+  }
+
+  .cm-text {
+    font-variant-numeric: tabular-nums;
+  }
+
+  time.cm-text {
+    color: inherit;
+    border: none;
+  }
+}

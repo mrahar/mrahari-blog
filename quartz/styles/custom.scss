@@ -441,6 +441,74 @@ a.hero-btn.ghost {
   background: transparent;
 }
 
+/* ---------- 3.7b homepage "start here" cards + garden nav ---------- */
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.9rem;
+  margin: 1.2rem 0 0.5rem;
+}
+a.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.1rem 1.2rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--secondary) 18%, transparent);
+  background: color-mix(in srgb, var(--secondary) 5%, var(--light)) !important;
+  text-decoration: none !important;
+  transition:
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+a.home-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--secondary) 42%, transparent);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--secondary) 16%, transparent);
+}
+.home-card-emoji {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+.home-card-title {
+  font-weight: 800;
+  font-size: 1.08rem;
+  color: var(--secondary);
+}
+.home-card-desc {
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--darkgray);
+}
+
+.home-garden {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 1rem 0 0.5rem;
+}
+a.home-garden-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+  color: var(--secondary) !important;
+  background: color-mix(in srgb, var(--secondary) 9%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--secondary) 16%, transparent);
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+a.home-garden-link:hover {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--secondary) 16%, transparent) !important;
+}
+
 /* ---------- 3.8 layout fixes ---------- */
 
 /* right sidebar (graph/TOC/backlinks): allow internal scroll on desktop only */
