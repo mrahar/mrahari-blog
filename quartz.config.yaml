@@ -198,16 +198,25 @@ plugins:
     layout:
       position: right
       priority: 50
+      condition: not-index
   - source: github:quartz-community/article-title
     enabled: true
     layout:
       position: beforeBody
       priority: 10
-  - source: github:quartz-community/content-meta
+  - source: ./plugins/content-meta
     enabled: true
     layout:
       position: beforeBody
       priority: 20
+      condition: not-index
+  - source:
+      repo: ./plugins/content-meta
+      name: ArchiveList
+    enabled: true
+    layout:
+      position: afterBody
+      priority: 5
   - source: github:quartz-community/tag-list
     enabled: false
     layout:
@@ -240,17 +249,30 @@ plugins:
       priority: 5
       condition: not-index
   - source: github:quartz-community/comments
-    enabled: false
+    enabled: true
     options:
       provider: giscus
-      options: {}
+      options:
+        repo: mrahar/mrahari-blog
+        repoId: R_kgDOTTF-sA
+        category: Announcements
+        categoryId: DIC_kwDOTTF-sM4DBC69
+        mapping: pathname
+        strict: true
+        reactionsEnabled: true
+        inputPosition: bottom
+        lightTheme: light
+        darkTheme: dark
+        themeUrl: https://giscus.app/themes
+        lang: fa
     layout:
       position: afterBody
       priority: 10
   - source: github:quartz-community/footer
     enabled: true
     options:
-      links: {}
+      links:
+        "© مجوز محتوا (CC BY-NC-SA)": "/لایسنس"
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer
