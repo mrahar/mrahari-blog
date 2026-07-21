@@ -11,8 +11,8 @@ return [
     'db' => [
         'driver'  => 'mysql',        // 'mysql' on the host, 'sqlite' for local tests
         'host'    => 'localhost',
-        'name'    => 'YOUR_DB_NAME',  // e.g. mrahari1_comments
-        'user'    => 'YOUR_DB_USER',  // e.g. mrahari1_comuser
+        'name'    => 'YOUR_DB_NAME',  // e.g. cpaneluser_comments
+        'user'    => 'YOUR_DB_USER',  // e.g. cpaneluser_comuser
         'pass'    => 'YOUR_DB_PASSWORD',
         'charset' => 'utf8mb4',
         // 'path' => __DIR__ . '/.local/comments.sqlite', // only for sqlite driver
@@ -25,15 +25,15 @@ return [
 
     'notify' => [
         'enabled' => true,
-        'to'      => 'mhd.ahari@gmail.com',
-        'from'    => 'comments@mrahari.com',
+        'to'      => 'you@example.com',
+        'from'    => 'comments@yourdomain.com',
     ],
 
     'site' => [
         // Only requests coming from this origin are accepted (anti-CSRF for a static site).
-        'allowed_origin' => 'https://blog.mrahari.com',
+        'allowed_origin' => 'https://blog.yourdomain.com',
         // Full URL to the admin panel, used in notification emails.
-        'admin_url'      => 'https://blog.mrahari.com/comment-api/admin.php',
+        'admin_url'      => 'https://blog.yourdomain.com/comment-api/admin.php',
     ],
 
     'antispam' => [
