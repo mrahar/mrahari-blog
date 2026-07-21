@@ -28,8 +28,8 @@
 }
 
 .sc-comment {
-  background: var(--light);
-  border: 1px solid var(--lightgray);
+  background: rgba(47, 168, 224, 0.07);
+  border: 1px solid rgba(47, 168, 224, 0.22);
   border-radius: 12px;
   padding: 1rem 1.15rem;
 }
@@ -109,8 +109,8 @@
 .sc-form-reply {
   margin-top: 0.75rem;
   padding: 0.9rem 1rem;
-  background: var(--light);
-  border: 1px solid var(--lightgray);
+  background: rgba(47, 168, 224, 0.14);
+  border: 1px solid rgba(47, 168, 224, 0.32);
   border-inline-start: 3px solid var(--secondary);
   border-radius: 10px;
 }
