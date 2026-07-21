@@ -56,9 +56,20 @@
     replyBtn.addEventListener("click", function () {
       if (replyHolder.firstChild) {
         replyHolder.innerHTML = ""
+        replyBtn.textContent = "پاسخ"
         return
       }
-      replyHolder.appendChild(buildForm(pid, c.id, "پاسختو بنویس…"))
+      replyBtn.textContent = "لغو"
+      replyHolder.appendChild(
+        buildForm(pid, c.id, {
+          placeholder: "پاسختو بنویس…",
+          replyTo: c.author_name, // pre-escaped by server
+          onCancel: function () {
+            replyHolder.innerHTML = ""
+            replyBtn.textContent = "پاسخ"
+          },
+        }),
+      )
     })
 
     if (c.replies && c.replies.length) {
@@ -71,22 +82,42 @@
     return node
   }
 
-  // Build a comment form (top-level or reply). parentId null = top-level.
-  function buildForm(pid, parentId, placeholder) {
+  // Build a comment form. opts = { placeholder, replyTo, onCancel }. No opts = top-level.
+  function buildForm(pid, parentId, opts) {
+    opts = opts || {}
     var startTime = Date.now()
     var form = el("form", "sc-form")
+    if (opts.replyTo) form.classList.add("sc-form-reply")
+
+    var head = ""
+    if (opts.replyTo) {
+      head =
+        '<div class="sc-reply-head">' +
+        '<span>در پاسخ به <b class="sc-reply-to"></b></span>' +
+        '<button type="button" class="sc-cancel">لغو</button>' +
+        "</div>"
+    }
+
     form.innerHTML =
+      head +
       '<div class="sc-field-row">' +
       '  <input class="sc-name" type="text" name="author_name" placeholder="اسمت *" maxlength="100" required>' +
       '  <input class="sc-email" type="email" name="author_email" placeholder="ایمیل (اختیاری)" maxlength="255">' +
       "</div>" +
-      '<textarea class="sc-textarea" name="body" placeholder="' + (placeholder || "نظرتو بنویس…") + '" maxlength="5000" required></textarea>' +
+      '<textarea class="sc-textarea" name="body" placeholder="' + (opts.placeholder || "نظرتو بنویس…") + '" maxlength="5000" required></textarea>' +
       // honeypot — hidden from humans, bots fill it
       '<input class="sc-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
       '<div class="sc-form-foot">' +
       '  <span class="sc-msg"></span>' +
       '  <button class="sc-submit" type="submit">ثبت نظر</button>' +
       "</div>"
+
+    if (opts.replyTo) {
+      form.querySelector(".sc-reply-to").innerHTML = opts.replyTo // pre-escaped
+      form.querySelector(".sc-cancel").addEventListener("click", function () {
+        if (opts.onCancel) opts.onCancel()
+      })
+    }
 
     var msg = form.querySelector(".sc-msg")
     var submitBtn = form.querySelector(".sc-submit")
