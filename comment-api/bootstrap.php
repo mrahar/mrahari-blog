@@ -6,6 +6,54 @@ declare(strict_types=1);
  * Every endpoint (post/get/admin/install) requires this file first.
  */
 
+/**
+ * Debug gate: error details are shown only when ?debug=<install_token> is passed.
+ * If config itself failed to load (e.g. a parse error in config.php), the token
+ * can't be checked, so any ?debug value reveals the (non-sensitive) parse error.
+ */
+function debug_enabled(): bool
+{
+    if (!isset($_GET['debug'])) {
+        return false;
+    }
+    $t = $GLOBALS['CONFIG']['install_token'] ?? null;
+    if ($t) {
+        return hash_equals((string)$t, (string)$_GET['debug']);
+    }
+    return true; // config not loaded — allow so the load error is visible
+}
+
+// Turn uncaught exceptions (e.g. DB connection failures) into clean JSON 500s
+// instead of a blank white page. Full detail goes to the host error_log always.
+set_exception_handler(function (Throwable $e): void {
+    error_log('[comment-api] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    $detail = debug_enabled()
+        ? $e->getMessage() . ' @ ' . basename($e->getFile()) . ':' . $e->getLine()
+        : null;
+    echo json_encode(['ok' => false, 'error' => 'Server error', 'detail' => $detail], JSON_UNESCAPED_UNICODE);
+});
+
+// Catch fatal/parse errors (which bypass the exception handler) on shutdown.
+register_shutdown_function(function (): void {
+    $err = error_get_last();
+    if (!$err || !in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        return;
+    }
+    error_log('[comment-api fatal] ' . $err['message'] . ' @ ' . $err['file'] . ':' . $err['line']);
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    $detail = debug_enabled()
+        ? $err['message'] . ' @ ' . basename($err['file']) . ':' . $err['line']
+        : null;
+    echo json_encode(['ok' => false, 'error' => 'Server error (fatal)', 'detail' => $detail], JSON_UNESCAPED_UNICODE);
+});
+
 // Load config: prefer real config.php (server); fall back to local test config.
 $__cfg = __DIR__ . '/config.php';
 if (!file_exists($__cfg)) {
