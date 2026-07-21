@@ -39,3 +39,20 @@ jobs:
           local-dir: ./public/
           server-dir: /blog/
           state-name: .ftp-deploy-sync-state-blog.json
+
+      # Self-hosted comment backend (PHP). config.php and .local are never in git,
+      # but we exclude them explicitly so the deploy can never overwrite the
+      # server-side config that holds the DB credentials.
+      - name: Upload comment-api via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./comment-api/
+          server-dir: /blog/comment-api/
+          state-name: .ftp-deploy-sync-state-comments.json
+          exclude: |
+            **/config.php
+            **/.local/**
+            **/.git*

@@ -1,0 +1,191 @@
+/* Self-hosted comments — Baran styling. Uses Quartz theme vars so it adapts to light/dark. */
+
+.sc-wrap {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--lightgray);
+}
+
+.sc-title,
+.sc-form-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin: 0 0 1rem;
+}
+
+.sc-form-title {
+  margin-top: 2rem;
+}
+
+/* ---- comment list ---- */
+.sc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sc-comment {
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.sc-reply {
+  background: transparent;
+  border: none;
+  border-inline-start: 2px solid var(--tertiary);
+  border-radius: 0;
+  padding-block: 0.4rem;
+  padding-inline-end: 0;
+}
+
+.sc-children {
+  margin-top: 0.6rem;
+  margin-inline-start: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sc-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.sc-author {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.sc-date {
+  font-size: 0.78rem;
+  color: var(--gray);
+}
+
+.sc-body {
+  color: var(--darkgray);
+  line-height: 1.75;
+  word-break: break-word;
+}
+
+.sc-actions {
+  margin-top: 0.4rem;
+}
+
+.sc-reply-btn {
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+}
+.sc-reply-btn:hover {
+  color: var(--secondary);
+}
+
+.sc-empty {
+  color: var(--gray);
+  padding: 0.5rem 0;
+}
+
+/* ---- form ---- */
+.sc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.sc-reply-form .sc-form {
+  margin-top: 0.5rem;
+}
+
+.sc-field-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sc-name,
+.sc-email,
+.sc-textarea {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--dark);
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+
+.sc-name,
+.sc-email {
+  flex: 1 1 180px;
+}
+
+.sc-textarea {
+  min-height: 5rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.sc-name:focus,
+.sc-email:focus,
+.sc-textarea:focus {
+  outline: none;
+  border-color: var(--tertiary);
+  box-shadow: 0 0 0 3px var(--highlight);
+}
+
+/* honeypot: hide from humans without display:none (some bots skip hidden) */
+.sc-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sc-form-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sc-submit {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--light);
+  background: var(--secondary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.sc-submit:hover {
+  background: var(--tertiary);
+}
+.sc-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.sc-msg {
+  font-size: 0.85rem;
+}
+.sc-ok {
+  color: #0a6b3a;
+}
+.sc-err {
+  color: #b3261e;
+}
