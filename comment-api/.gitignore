@@ -1,0 +1,5 @@
+# Real config with DB credentials — NEVER commit this.
+config.php
+
+# Local test sandbox (sqlite db + local config)
+.local/

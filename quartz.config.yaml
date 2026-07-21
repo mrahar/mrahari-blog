@@ -249,7 +249,7 @@ plugins:
       priority: 5
       condition: not-index
   - source: github:quartz-community/comments
-    enabled: true
+    enabled: false # replaced by our self-hosted comment widget (static/comments.js)
     options:
       provider: giscus
       options:
