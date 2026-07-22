@@ -7,3 +7,14 @@ RewriteRule ^(.*)$ $1.html [L]
 
 # Custom 404 page
 ErrorDocument 404 /404.html
+
+# Cache policy: HTML must always revalidate so new deploys appear immediately;
+# hashed assets (js/css/fonts) can be cached long since their name changes on rebuild.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(js|css|woff2?|ttf|png|jpe?g|svg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
