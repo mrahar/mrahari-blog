@@ -1,0 +1,94 @@
+{
+  "name": "@mrahari/site-widgets",
+  "version": "1.0.0",
+  "description": "Custom sidebar widgets for mrahari.com — curated Topics list and renamed Backlinks",
+  "type": "module",
+  "license": "MIT",
+  "author": "MR",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "preact": {
+      "optional": false
+    }
+  },
+  "dependencies": {
+    "@quartz-community/types": "github:quartz-community/types",
+    "@quartz-community/utils": "github:quartz-community/utils"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "preact": "^10.28.2",
+    "sass": "^1.97.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "quartz": {
+    "name": "site-widgets",
+    "displayName": "Site Widgets",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "components": {
+      "Topics": {
+        "displayName": "Topics",
+        "defaultPosition": "left",
+        "defaultPriority": 45
+      },
+      "SiteBacklinks": {
+        "displayName": "Backlinks",
+        "defaultPosition": "right",
+        "defaultPriority": 50
+      },
+      "SiteToc": {
+        "displayName": "Table of Contents",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 25
+      }
+    },
+    "optionSchema": {
+      "title": {
+        "type": "string"
+      },
+      "hideWhenEmpty": {
+        "type": "boolean"
+      },
+      "emptyText": {
+        "type": "string"
+      },
+      "collapseByDefault": {
+        "type": "boolean"
+      }
+    }
+  }
+}

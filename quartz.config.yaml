@@ -82,12 +82,12 @@ plugins:
   - source: github:quartz-community/github-flavored-markdown
     enabled: true
     order: 40
+  # Keep enabled for its TRANSFORMER (populates fileData.toc), but no `layout`
+  # so its own component is NOT rendered — we render our local site-widgets
+  # TableOfContents instead (boxed, spaced, working collapse toggle).
   - source: github:quartz-community/table-of-contents
     enabled: true
     order: 50
-    layout:
-      position: right
-      priority: 30
   - source: github:quartz-community/crawl-links
     enabled: true
     options:
@@ -176,12 +176,26 @@ plugins:
   - source: github:quartz-community/tag-page
     enabled: true
   - source: github:quartz-community/explorer
-    enabled: true
+    enabled: false # replaced by recent-notes ("آخرین مطالب") — full tree gets too long as posts grow
     layout:
       position: left
       priority: 50
+  # Community graph DISABLED: it reads the current slug from window.location
+  # (percent-encoded for Persian) without decoding, so on every Persian page the
+  # current node is isolated with a garbled label. Replaced by our local
+  # graph-fa which decodes the slug.
   - source: github:quartz-community/graph
+    enabled: false
+    layout:
+      position: right
+      priority: 10
+  - source:
+      repo: ./plugins/graph-fa
+      name: GraphFa
     enabled: true
+    options:
+      localGraph:
+        depth: 2 # notes mostly connect through the home hub; depth 2 shows the wider neighbourhood so the local graph does not look empty
     layout:
       position: right
       priority: 10
@@ -194,10 +208,34 @@ plugins:
       groupOptions:
         grow: true
   - source: github:quartz-community/backlinks
-    enabled: true
+    enabled: false # replaced by local site-widgets Backlinks (renamed title)
     layout:
       position: right
       priority: 50
+      condition: not-index
+  - source:
+      repo: ./plugins/site-widgets
+      name: SiteBacklinks
+    enabled: true
+    options:
+      title: ارجاع‌ها به این نوشته
+      hideWhenEmpty: true
+      emptyText: هنوز نوشته‌ای به این‌جا ارجاع نداده
+    layout:
+      position: right
+      priority: 50
+      condition: not-index
+  # فهرست مطالب — باکسِ محلیِ داخلِ صفحه‌ی نت (بالای متن)، با فلشِ جمع‌شونده‌ی سالم
+  - source:
+      repo: ./plugins/site-widgets
+      name: SiteToc
+    enabled: true
+    options:
+      title: فهرست مطالب
+      collapseByDefault: false
+    layout:
+      position: beforeBody
+      priority: 25
       condition: not-index
   - source: github:quartz-community/article-title
     enabled: true
@@ -274,7 +312,37 @@ plugins:
       links:
         "© مجوز محتوا (CC BY-NC-SA)": "/لایسنس"
   - source: github:quartz-community/recent-notes
-    enabled: false
+    enabled: false # replaced by local site-widgets Topics (curated links)
+    options:
+      title: آخرین مطالب
+      limit: 5
+      linkToMore: false
+      showTags: false
+      hideTagPages: true
+      hideFolderPages: true
+    layout:
+      position: left
+      priority: 45
+  # موضوعات اصلی — لیستِ دستی. برای تکمیل، فقط items زیر را ویرایش کن
+  # (href = اسلاگِ نتِ داخلی مثل «ذهن-دوم»، یا آدرسِ کاملِ خارجی که با http شروع شود).
+  - source:
+      repo: ./plugins/site-widgets
+      name: Topics
+    enabled: true
+    options:
+      title: موضوعات اصلی
+      items:
+        - title: ذهن دوم
+          href: ذهن-دوم
+        - title: قیمت‌گذاری در دیجی‌کالا
+          href: قیمت‌گذاری-در-دیجی‌کالا
+        - title: وضعیت رشد نوشته‌ها
+          href: وضعیت-رشد
+        - title: درباره
+          href: درباره
+    layout:
+      position: left
+      priority: 45
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
