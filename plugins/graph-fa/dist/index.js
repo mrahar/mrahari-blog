@@ -319,13 +319,52 @@ var graph_default = ".graph > h3 {\n  font-size: 1rem;\n  margin: 0;\n}\n.graph 
 
 // src/components/scripts/graph.inline.ts
 var graph_inline_default = `// @ts-nocheck
-import {
-  removeAllChildren,
-  getBasePath,
-  getFullSlugFromUrl,
-  simplifySlug,
-  resolveBasePath,
-} from "@quartz-community/utils";
+// NOTE: these helpers are inlined (copied verbatim from @quartz-community/utils)
+// instead of imported. A local plugin ships this script as raw source and Quartz
+// does NOT re-bundle its bare \`import ... from "@quartz-community/utils"\`, so the
+// import would leak into the browser and crash the whole page's scripts.
+function removeAllChildren(el) {
+  while (el.firstChild) {
+    el.removeChild(el.firstChild);
+  }
+}
+function getBasePath() {
+  if (typeof document === "undefined") return "";
+  return document.body?.dataset?.basepath ?? "";
+}
+function resolveBasePath(to, basePath) {
+  const base = basePath ?? getBasePath();
+  const slug = to.startsWith("/") ? to : "/" + to;
+  return base + slug;
+}
+function getFullSlugFromUrl() {
+  let rawSlug = window.location.pathname;
+  if (rawSlug.endsWith("/")) rawSlug = rawSlug.slice(0, -1);
+  if (rawSlug.startsWith("/")) rawSlug = rawSlug.slice(1);
+  return rawSlug;
+}
+function endsWith(s, suffix) {
+  return s === suffix || s.endsWith("/" + suffix);
+}
+function trimSuffix(s, suffix) {
+  if (endsWith(s, suffix)) {
+    s = s.slice(0, -suffix.length);
+  }
+  return s;
+}
+function stripSlashes(s, onlyStripPrefix) {
+  if (s.startsWith("/")) {
+    s = s.substring(1);
+  }
+  if (!onlyStripPrefix && s.endsWith("/")) {
+    s = s.slice(0, -1);
+  }
+  return s;
+}
+function simplifySlug(fp) {
+  const res = stripSlashes(trimSuffix(fp, "index"), true);
+  return res.length === 0 ? "/" : res;
+}
 
 (function () {
   function getSlugFromUrl() {

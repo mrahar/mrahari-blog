@@ -46,14 +46,17 @@
     }
 
     & > li > a {
-      color: var(--dark);
-      opacity: 0.72;
+      color: var(--secondary); // blue → signals these are in-page links
+      opacity: 0.85;
       background: transparent;
-      transition: opacity 0.3s ease;
+      transition:
+        opacity 0.3s ease,
+        color 0.3s ease;
 
       &:hover,
       &.in-view {
         opacity: 1;
+        text-decoration: underline;
       }
     }
 

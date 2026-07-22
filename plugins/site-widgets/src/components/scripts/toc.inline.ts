@@ -36,3 +36,4 @@ function setupToc() {
 }
 
 document.addEventListener("nav", setupToc);
+document.addEventListener("render", setupToc);

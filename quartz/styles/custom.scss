@@ -609,6 +609,7 @@ a.tag-link:hover,
   /* 2) each sidebar widget becomes its own clean card, so blocks read as separate */
   .sidebar .graph,
   .sidebar .toc,
+  .sidebar .topics,
   .sidebar .backlinks,
   .sidebar .recent-notes,
   .sidebar .sc-recent {
@@ -619,27 +620,30 @@ a.tag-link:hover,
     margin: 0; /* vertical spacing comes from the sidebar's flex gap */
   }
 
-  /* 3) whole sidebar reads smaller — the default text was oversized */
+  /* 3) sidebar text size (bumped up on MR's request — was 0.8rem, too small) */
   .sidebar .toc,
+  .sidebar .topics,
   .sidebar .backlinks,
   .sidebar .recent-notes,
   .sidebar .sc-recent {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
   .sidebar .toc a,
+  .sidebar .topics a,
   .sidebar .backlinks a {
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
 
-  /* 4) card titles: consistent, compact */
+  /* 4) card titles: consistent */
   .sidebar .graph > h3,
+  .sidebar .topics > h3,
   .sidebar .backlinks > h3,
   .sidebar .recent-notes > h3,
   .sidebar .toc > .toc-header > h3,
   .sidebar .sc-recent > .sc-recent-heading {
     margin: 0 0 0.65rem;
-    font-size: 0.88rem;
+    font-size: 1rem;
     font-weight: 700;
   }
 
