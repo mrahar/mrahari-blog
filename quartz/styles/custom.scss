@@ -666,6 +666,16 @@ a.tag-link:hover,
   }
 }
 
+/* ---------- 3.96 Mobile sidebars: keep them clean ---------- */
+/* On mobile the left sidebar becomes a compact horizontal toolbar row; full
+   widgets (recent-comments list) don't fit there, so hide it. Graph & topics are
+   already hidden via layout display: desktop-only. */
+@media all and ($mobile) {
+  .sidebar.left .sc-recent {
+    display: none;
+  }
+}
+
 /* ---------- 4. Homepage hero gradient (index page only) ---------- */
 body[data-slug="index"] .center .page-header {
   position: relative;

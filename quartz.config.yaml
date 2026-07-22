@@ -199,6 +199,7 @@ plugins:
     layout:
       position: right
       priority: 10
+      display: desktop-only # graph doesn't fit the compact mobile sidebar row
   - source: github:quartz-community/search
     enabled: true
     layout:
@@ -343,6 +344,7 @@ plugins:
     layout:
       position: left
       priority: 45
+      display: desktop-only # topics list doesn't fit the compact mobile sidebar row
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
