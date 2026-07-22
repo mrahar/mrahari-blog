@@ -190,7 +190,96 @@
       })
   }
 
+  // The landing page must never show comments.
+  function isHome() {
+    var slug = document.body && document.body.dataset ? document.body.dataset.slug : ""
+    return slug === "index" || pageId() === "/"
+  }
+
+  // Turn a page_id like "/foo-bar/baz" into a readable label "baz".
+  function pageLabel(pid) {
+    try {
+      var parts = decodeURIComponent(pid).split("/").filter(Boolean)
+      var last = parts.length ? parts[parts.length - 1] : pid
+      return last.replace(/-/g, " ")
+    } catch (e) {
+      return pid
+    }
+  }
+
+  // Quartz's content index maps slug -> { title }. Cached across nav events.
+  var _indexCache = null
+  function loadContentIndex() {
+    if (_indexCache) return _indexCache
+    _indexCache = fetch("/static/contentIndex.json")
+      .then(function (r) {
+        return r.json()
+      })
+      .catch(function () {
+        return {}
+      })
+    return _indexCache
+  }
+
+  // Real post title for a page_id ("/foo" -> index["foo"].title), or a readable fallback.
+  function pageTitle(index, pid) {
+    var slug = pid.replace(/^\//, "")
+    if (index && index[slug] && index[slug].title) return index[slug].title
+    return pageLabel(pid)
+  }
+
+  // Sidebar widget ("آخرین دیدگاه‌ها"): newest approved comments across the whole site.
+  // Mounts in the "مطالب" sidebar (the RTL-right one that holds the explorer).
+  function initRecent() {
+    // Runs everywhere INCLUDING the landing page — only the comment thread/form is hidden on home.
+    var sidebar = document.querySelector(".left.sidebar")
+    if (!sidebar) return
+    if (document.getElementById("sc-recent")) return // already mounted
+
+    var box = el("div", "sc-recent")
+    box.id = "sc-recent"
+    box.appendChild(el("h3", "sc-recent-heading", "آخرین دیدگاه‌ها"))
+    var list = el("ul", "sc-recent-list")
+    box.appendChild(list)
+    sidebar.appendChild(box)
+
+    Promise.all([
+      fetch(API_BASE + "/recent.php?limit=5").then(function (r) {
+        return r.json()
+      }),
+      loadContentIndex(),
+    ])
+      .then(function (out) {
+        var res = out[0]
+        var index = out[1]
+        list.innerHTML = ""
+        if (!res.ok || !res.comments || res.comments.length === 0) {
+          box.style.display = "none"
+          return
+        }
+        for (var i = 0; i < res.comments.length; i++) {
+          var c = res.comments[i]
+          var li = el("li", "sc-recent-item")
+          var a = el("a", "sc-recent-link")
+          a.href = c.page_id // absolute path from site root
+          a.appendChild(el("span", "sc-recent-author", c.author_name)) // pre-escaped
+          a.appendChild(document.createTextNode(" در "))
+          var t = el("span", "sc-recent-post")
+          t.textContent = pageTitle(index, c.page_id) // plain text — safe
+          a.appendChild(t)
+          li.appendChild(a)
+          list.appendChild(li)
+        }
+      })
+      .catch(function () {
+        box.style.display = "none"
+      })
+  }
+
   function init() {
+    initRecent()
+
+    if (isHome()) return // no comment thread/form on the landing page
     var article = document.querySelector("article")
     if (!article) return
     if (document.getElementById("self-comments")) return // already mounted

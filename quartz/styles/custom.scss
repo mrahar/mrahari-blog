@@ -592,6 +592,76 @@ a.tag-link:hover,
   border-color: var(--secondary);
 }
 
+/* ---------- 3.95 Baran sidebar: breathing room + separated cards ---------- */
+/* Desktop only — on mobile the sidebars collapse into a row and must stay untouched. */
+@media all and ($desktop) {
+  /* 1) modest gap + a thin divider line between each sidebar and the center content */
+  .page > #quartz-body {
+    column-gap: 1rem;
+  }
+  .sidebar.left {
+    border-left: 1px solid var(--lightgray);
+  }
+  .sidebar.right {
+    border-right: 1px solid var(--lightgray);
+  }
+
+  /* 2) each sidebar widget becomes its own clean card, so blocks read as separate */
+  .sidebar .graph,
+  .sidebar .toc,
+  .sidebar .backlinks,
+  .sidebar .recent-notes,
+  .sidebar .sc-recent {
+    background: color-mix(in srgb, var(--secondary) 4%, var(--light));
+    border: 1px solid var(--lightgray);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    margin: 0; /* vertical spacing comes from the sidebar's flex gap */
+  }
+
+  /* 3) whole sidebar reads smaller — the default text was oversized */
+  .sidebar .toc,
+  .sidebar .backlinks,
+  .sidebar .recent-notes,
+  .sidebar .sc-recent {
+    font-size: 0.8rem;
+  }
+  .sidebar .toc a,
+  .sidebar .backlinks a {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  /* 4) card titles: consistent, compact */
+  .sidebar .graph > h3,
+  .sidebar .backlinks > h3,
+  .sidebar .recent-notes > h3,
+  .sidebar .toc > .toc-header > h3,
+  .sidebar .sc-recent > .sc-recent-heading {
+    margin: 0 0 0.65rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  /* 5) recent-notes items: titles were huge <h3> links — shrink to list size */
+  .sidebar .recent-notes .recent-li {
+    margin-bottom: 0.65rem;
+  }
+  .sidebar .recent-notes .recent-li:last-child {
+    margin-bottom: 0;
+  }
+  .sidebar .recent-notes .desc h3 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .sidebar .recent-notes .meta {
+    font-size: 0.68rem;
+    margin: 0.1rem 0 0;
+  }
+}
+
 /* ---------- 4. Homepage hero gradient (index page only) ---------- */
 body[data-slug="index"] .center .page-header {
   position: relative;
