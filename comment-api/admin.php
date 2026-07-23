@@ -41,6 +41,23 @@ if ($isAdmin && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['a
     }
     $id     = (int)($_POST['id'] ?? 0);
     $action = (string)$_POST['action'];
+
+    // Bulk-move every comment from one page address to another. Use this after
+    // renaming a note's slug so its existing comments follow to the new URL.
+    if ($action === 'remap') {
+        $from = trim((string)($_POST['from'] ?? ''));
+        $to   = trim((string)($_POST['to'] ?? ''));
+        if ($from !== '' && $to !== '' && $from !== $to) {
+            $stmt = db()->prepare('UPDATE comments SET page_id = ? WHERE page_id = ?');
+            $stmt->execute([$to, $from]);
+            $_SESSION['flash'] = 'انتقال انجام شد: ' . $stmt->rowCount() . ' دیدگاه از «' . rawurldecode($from) . '» به «' . rawurldecode($to) . '» منتقل شد.';
+        } else {
+            $_SESSION['flash'] = 'آدرس مبدأ و مقصد باید پر و متفاوت باشند.';
+        }
+        header('Location: admin.php');
+        exit;
+    }
+
     if ($id > 0) {
         if ($action === 'approve') {
             db()->prepare('UPDATE comments SET status = ? WHERE id = ?')->execute(['approved', $id]);
@@ -122,6 +139,13 @@ function e(?string $s): string
 
     // Count pending for the tab label.
     $pendingCount = (int)db()->query("SELECT COUNT(*) FROM comments WHERE status = 'pending'")->fetchColumn();
+
+    // Distinct page addresses, for the remap tool's source dropdown.
+    $pageRows = db()->query('SELECT page_id, COUNT(*) AS n FROM comments GROUP BY page_id ORDER BY page_id')->fetchAll();
+
+    // One-time flash message (e.g. the result of a remap).
+    $flash = (string)($_SESSION['flash'] ?? '');
+    unset($_SESSION['flash']);
   ?>
   <div class="row" style="justify-content:space-between">
     <h1>پنل کامنت‌ها</h1>
@@ -133,6 +157,33 @@ function e(?string $s): string
       <a class="btn <?= $filter === $key ? 'active' : '' ?>" href="admin.php?filter=<?= e($key) ?>"><?= e($label) ?></a>
     <?php endforeach; ?>
   </div>
+
+  <?php if ($flash !== ''): ?>
+    <div class="card" style="border-color:var(--blue);background:#eaf6fd"><?= e($flash) ?></div>
+  <?php endif; ?>
+
+  <details class="card">
+    <summary style="cursor:pointer;font-weight:700">🔗 انتقال آدرس صفحه (بعد از تغییر لینک نت)</summary>
+    <p class="meta" style="margin-top:12px">اگر اسلاگِ یک نت را عوض کردی، دیدگاه‌های قدیمی به آدرسِ قبلی چسبیده‌اند. اینجا آدرسِ مبدأ را انتخاب کن و آدرسِ جدید را بنویس تا همه‌ی دیدگاه‌هایش منتقل شوند.</p>
+    <form method="post" onsubmit="return confirm('همه‌ی دیدگاه‌های این آدرس منتقل بشن؟')">
+      <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+      <input type="hidden" name="action" value="remap">
+      <div style="margin-bottom:8px">
+        <label>از (آدرسِ فعلی):</label><br>
+        <select name="from" required style="font-family:inherit;padding:8px 12px;border:1px solid var(--border);border-radius:8px;width:100%;max-width:520px">
+          <option value="">— انتخاب کن —</option>
+          <?php foreach ($pageRows as $pr): ?>
+            <option value="<?= e($pr['page_id']) ?>"><?= e(rawurldecode((string)$pr['page_id'])) ?> (<?= (int)$pr['n'] ?> دیدگاه)</option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div style="margin-bottom:12px">
+        <label>به (آدرسِ جدید، مثلاً <code>/growth-status</code>):</label><br>
+        <input type="text" name="to" required placeholder="/new-slug" dir="ltr" style="font-family:inherit;padding:8px 12px;border:1px solid var(--border);border-radius:8px;width:100%;max-width:520px">
+      </div>
+      <button type="submit" class="approve">انتقال</button>
+    </form>
+  </details>
 
   <?php if (!$comments): ?>
     <div class="empty">چیزی اینجا نیست.</div>
