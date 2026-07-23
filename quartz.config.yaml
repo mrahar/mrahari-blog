@@ -96,8 +96,11 @@ plugins:
   - source: github:quartz-community/description
     enabled: true
     order: 70
+  # DISABLED: no note uses math, and katex pulled ~300KB (js+css) from an external
+  # CDN on every page (~6s), which was the main cause of the slow load. Re-enable
+  # only if a note actually needs formulas.
   - source: github:quartz-community/latex
-    enabled: true
+    enabled: false
     options:
       renderEngine: katex
     order: 80
