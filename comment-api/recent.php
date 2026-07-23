@@ -8,7 +8,7 @@ if ($limit < 1)  $limit = 5;
 if ($limit > 20) $limit = 20;
 
 $stmt = db()->prepare(
-    'SELECT page_id, author_name, body, created_at
+    'SELECT id, page_id, author_name, body, created_at
      FROM comments WHERE status = ? ORDER BY created_at DESC LIMIT ' . $limit
 );
 $stmt->execute(['approved']);
@@ -23,6 +23,7 @@ foreach ($rows as $r) {
         $excerpt .= '…';
     }
     $out[] = [
+        'id'          => (int)$r['id'],
         'page_id'     => htmlspecialchars($r['page_id'], ENT_QUOTES, 'UTF-8'),
         'author_name' => htmlspecialchars($r['author_name'], ENT_QUOTES, 'UTF-8'),
         'excerpt'     => htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8'),

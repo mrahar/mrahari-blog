@@ -75,6 +75,7 @@
   // Build one comment node (recursively renders replies).
   function renderComment(c, pid, depth) {
     var node = el("div", "sc-comment")
+    node.id = "comment-" + c.id // anchor target for deep links from the recent-comments widget
     if (depth > 0) node.classList.add("sc-reply")
 
     var head = el("div", "sc-head")
@@ -227,11 +228,30 @@
         for (var i = 0; i < res.comments.length; i++) {
           listEl.appendChild(renderComment(res.comments[i], pid, 0))
         }
+        // Comments render async, so honour a #comment-<id> hash only after they exist.
+        scrollToHashComment()
       })
       .catch(function () {
         listEl.innerHTML = ""
         listEl.appendChild(el("p", "sc-empty", "نظرها لود نشدن."))
       })
+  }
+
+  // If the URL points at a specific comment (e.g. from "آخرین دیدگاه‌ها"),
+  // scroll to it and flash a highlight so it's easy to spot.
+  function scrollToHashComment() {
+    var h = window.location.hash
+    if (!/^#comment-\d+$/.test(h)) return
+    var target = document.getElementById(h.slice(1))
+    if (!target) return
+    target.scrollIntoView({ behavior: "smooth", block: "center" })
+    target.classList.remove("sc-highlight")
+    // reflow so the animation restarts even if the class was just removed
+    void target.offsetWidth
+    target.classList.add("sc-highlight")
+    setTimeout(function () {
+      target.classList.remove("sc-highlight")
+    }, 2600)
   }
 
   // The landing page must never show comments.
@@ -305,7 +325,8 @@
           var c = res.comments[i]
           var li = el("li", "sc-recent-item")
           var a = el("a", "sc-recent-link")
-          a.href = c.page_id // absolute path from site root
+          // Link straight to the exact comment (anchor handled by scrollToHashComment).
+          a.href = c.page_id + (c.id ? "#comment-" + c.id : "") // absolute path from site root
           a.appendChild(el("span", "sc-recent-author", c.author_name)) // pre-escaped
           a.appendChild(document.createTextNode(" در "))
           var t = el("span", "sc-recent-post")

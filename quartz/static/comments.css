@@ -270,3 +270,26 @@
 .sc-recent-post {
   color: var(--darkgray);
 }
+
+/* Deep-linked comment (arrived via "آخرین دیدگاه‌ها"): keep it clear of any
+   sticky header when scrolled to, then flash a brand-blue highlight. The tint is
+   semi-transparent so it works on both light and dark themes. */
+.sc-comment {
+  scroll-margin-top: 90px;
+}
+.sc-comment.sc-highlight {
+  animation: sc-flash 2.6s ease-out;
+}
+@keyframes sc-flash {
+  0%,
+  25% {
+    background: rgba(47, 168, 224, 0.3);
+    border-color: rgba(47, 168, 224, 0.75);
+    box-shadow: 0 0 0 3px rgba(47, 168, 224, 0.22);
+  }
+  100% {
+    background: rgba(47, 168, 224, 0.07);
+    border-color: rgba(47, 168, 224, 0.22);
+    box-shadow: 0 0 0 0 rgba(47, 168, 224, 0);
+  }
+}
