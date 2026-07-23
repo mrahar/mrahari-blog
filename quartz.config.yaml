@@ -180,14 +180,26 @@ plugins:
     layout:
       position: left
       priority: 50
-  # Graph fully DISABLED for now (MR's request): local graph-fa removed and the
-  # stock graph turned off while we isolate the dark-mode/interactivity issue.
-  # Re-enable later once interactivity is confirmed working.
+  # Community graph DISABLED: it reads the current slug from window.location
+  # (percent-encoded for Persian) without decoding, so on every Persian page the
+  # current node is isolated with a garbled label. Replaced by our local
+  # graph-fa which decodes the slug.
   - source: github:quartz-community/graph
     enabled: false
     layout:
       position: right
       priority: 10
+  - source:
+      repo: ./plugins/graph-fa
+      name: GraphFa
+    enabled: true
+    options:
+      localGraph:
+        depth: 2 # notes mostly connect through the home hub; depth 2 shows the wider neighbourhood so the local graph does not look empty
+    layout:
+      position: right
+      priority: 10
+      display: desktop-only # graph doesn't fit the compact mobile sidebar row
   - source: github:quartz-community/search
     enabled: true
     layout:
