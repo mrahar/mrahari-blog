@@ -10,7 +10,7 @@ import style from "./styles/topics.scss";
 export interface TopicItem {
   /** Text shown for the link. */
   title: string;
-  /** Internal slug (e.g. "ذهن-دوم") or full external URL (starts with http). */
+  /** Internal slug (e.g. "second-mind") or full external URL (starts with http). */
   href: string;
 }
 
@@ -25,10 +25,10 @@ export interface TopicsOptions {
 const defaultOptions: TopicsOptions = {
   title: "موضوعات اصلی",
   items: [
-    { title: "ذهن دوم", href: "ذهن-دوم" },
-    { title: "قیمت‌گذاری در دیجی‌کالا", href: "قیمت‌گذاری-در-دیجی‌کالا" },
-    { title: "وضعیت رشد نوشته‌ها", href: "وضعیت-رشد" },
-    { title: "درباره", href: "درباره" },
+    { title: "ذهن دوم", href: "second-mind" },
+    { title: "قیمت‌گذاری در دیجی‌کالا", href: "digikala-pricing" },
+    { title: "وضعیت رشد نوشته‌ها", href: "growth-status" },
+    { title: "درباره", href: "about" },
   ],
 };
 

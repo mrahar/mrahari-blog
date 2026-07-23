@@ -3,7 +3,7 @@ import { QuartzComponent } from '@quartz-community/types';
 interface TopicItem {
     /** Text shown for the link. */
     title: string;
-    /** Internal slug (e.g. "ذهن-دوم") or full external URL (starts with http). */
+    /** Internal slug (e.g. "second-mind") or full external URL (starts with http). */
     href: string;
 }
 interface TopicsOptions {
