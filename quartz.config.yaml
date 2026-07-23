@@ -195,7 +195,7 @@ plugins:
     enabled: true
     options:
       localGraph:
-        depth: 2 # notes mostly connect through the home hub; depth 2 shows the wider neighbourhood so the local graph does not look empty
+        depth: 1 # only the notes directly linked to the current page (every note also links the index hub, so depth 2 would pull in the whole site)
     layout:
       position: right
       priority: 10
