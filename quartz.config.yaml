@@ -311,7 +311,7 @@ plugins:
     enabled: true
     options:
       links:
-        "© مجوز محتوا (CC BY-NC-SA)": "/لایسنس"
+        "© مجوز محتوا (CC BY-NC-SA)": "/license"
   - source: github:quartz-community/recent-notes
     enabled: false # replaced by local site-widgets Topics (curated links)
     options:
@@ -325,7 +325,7 @@ plugins:
       position: left
       priority: 45
   # موضوعات اصلی — لیستِ دستی. برای تکمیل، فقط items زیر را ویرایش کن
-  # (href = اسلاگِ نتِ داخلی مثل «ذهن-دوم»، یا آدرسِ کاملِ خارجی که با http شروع شود).
+  # (href = اسلاگِ انگلیسیِ نتِ داخلی مثل «second-mind»، یا آدرسِ کاملِ خارجی که با http شروع شود).
   - source:
       repo: ./plugins/site-widgets
       name: Topics
@@ -334,13 +334,13 @@ plugins:
       title: موضوعات اصلی
       items:
         - title: ذهن دوم
-          href: ذهن-دوم
+          href: second-mind
         - title: قیمت‌گذاری در دیجی‌کالا
-          href: قیمت‌گذاری-در-دیجی‌کالا
+          href: digikala-pricing
         - title: وضعیت رشد نوشته‌ها
-          href: وضعیت-رشد
+          href: growth-status
         - title: درباره
-          href: درباره
+          href: about
     layout:
       position: left
       priority: 45

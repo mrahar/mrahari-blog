@@ -9,10 +9,10 @@ import style from "./styles/archiveList.scss";
 
 type DateKey = "created" | "modified";
 
-// Which archive a page is, detected from its slug (ZWNJ/hyphen tolerant).
+// Which archive a page is, detected from its (English) slug.
 function archiveKind(slug: string): DateKey | null {
-  if (slug.includes("کاشت")) return "created";
-  if (slug.includes("آبیاری")) return "modified";
+  if (slug === "by-planting") return "created";
+  if (slug === "by-watering") return "modified";
   return null;
 }
 
@@ -22,7 +22,7 @@ function isSystemSlug(slug: string): boolean {
   if (slug === "index" || slug.endsWith("/index")) return true;
   if (slug === "404") return true;
   if (slug === "tags" || slug.startsWith("tags/")) return true;
-  if (slug.includes("کاشت") || slug.includes("آبیاری") || slug.includes("وضعیت-رشد")) return true;
+  if (slug === "by-planting" || slug === "by-watering" || slug === "growth-status") return true;
   return false;
 }
 

@@ -76,9 +76,9 @@ function u2(e2, t2, n2, o2, i2, u3) {
 }
 
 // src/components/ContentMeta.tsx
-var SLUG_STATUS = "\u0648\u0636\u0639\u06CC\u062A-\u0631\u0634\u062F";
-var SLUG_PLANTED = "\u0628\u0631-\u0627\u0633\u0627\u0633-\u06A9\u0627\u0634\u062A";
-var SLUG_WATERED = "\u0628\u0631-\u0627\u0633\u0627\u0633-\u0622\u0628\u06CC\u0627\u0631\u06CC";
+var SLUG_STATUS = "growth-status";
+var SLUG_PLANTED = "by-planting";
+var SLUG_WATERED = "by-watering";
 var defaultOptions = {
   showStatus: true,
   showWordCount: true,
@@ -240,8 +240,8 @@ var archiveList_default = ".archive-list {\n  margin-top: 0.5rem;\n}\n.archive-l
 
 // src/components/ArchiveList.tsx
 function archiveKind(slug2) {
-  if (slug2.includes("\u06A9\u0627\u0634\u062A")) return "created";
-  if (slug2.includes("\u0622\u0628\u06CC\u0627\u0631\u06CC")) return "modified";
+  if (slug2 === "by-planting") return "created";
+  if (slug2 === "by-watering") return "modified";
   return null;
 }
 function isSystemSlug(slug2) {
@@ -249,7 +249,7 @@ function isSystemSlug(slug2) {
   if (slug2 === "index" || slug2.endsWith("/index")) return true;
   if (slug2 === "404") return true;
   if (slug2 === "tags" || slug2.startsWith("tags/")) return true;
-  if (slug2.includes("\u06A9\u0627\u0634\u062A") || slug2.includes("\u0622\u0628\u06CC\u0627\u0631\u06CC") || slug2.includes("\u0648\u0636\u0639\u06CC\u062A-\u0631\u0634\u062F")) return true;
+  if (slug2 === "by-planting" || slug2 === "by-watering" || slug2 === "growth-status") return true;
   return false;
 }
 function formatFa2(date) {

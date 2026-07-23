@@ -8,9 +8,9 @@ import type { JSX } from "preact";
 import style from "./styles/contentMeta.scss";
 
 // Link targets for the clickable badges (must match the archive/philosophy slugs).
-const SLUG_STATUS = "وضعیت-رشد" as FullSlug;
-const SLUG_PLANTED = "بر-اساس-کاشت" as FullSlug;
-const SLUG_WATERED = "بر-اساس-آبیاری" as FullSlug;
+const SLUG_STATUS = "growth-status" as FullSlug;
+const SLUG_PLANTED = "by-planting" as FullSlug;
+const SLUG_WATERED = "by-watering" as FullSlug;
 
 export interface ContentMetaOptions {
   /** Show the growth-state badge (🌦️/🌧️/🌈) */
