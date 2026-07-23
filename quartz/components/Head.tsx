@@ -96,6 +96,21 @@ export default (() => {
 
         <link rel="icon" href={iconPath} />
         <link rel="stylesheet" href={commentsCssPath} />
+        {fileData.slug !== "404" &&
+          (() => {
+            // Page addresses this note answers to: canonical slug first, then any
+            // aliases (old slugs). Lets the comment system follow a renamed note so
+            // old comments stay reachable without manual migration.
+            const rawAliases = (fileData.frontmatter as Record<string, unknown> | undefined)
+              ?.aliases
+            const aliases = Array.isArray(rawAliases)
+              ? rawAliases
+              : typeof rawAliases === "string"
+                ? [rawAliases]
+                : []
+            const slugs = [fileData.slug, ...aliases].filter(Boolean) as string[]
+            return <meta name="comment-slugs" content={slugs.join("\n")} />
+          })()}
         <script src={commentsJsPath} defer></script>
         <script src={homeGlowJsPath} defer></script>
         <meta name="description" content={description} />

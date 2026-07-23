@@ -8,11 +8,26 @@ if ($page === '' || mb_strlen($page) > 255) {
     json_out(['ok' => false, 'error' => 'page_id required'], 400);
 }
 
+// Also read comments from the note's old addresses (aliases), so a renamed note
+// keeps its history. The client sends them as a newline-separated list.
+$ids = [$page];
+$aliasesRaw = (string)($_GET['aliases'] ?? '');
+if ($aliasesRaw !== '') {
+    foreach (explode("\n", $aliasesRaw) as $a) {
+        $a = trim($a);
+        if ($a !== '' && mb_strlen($a) <= 255 && !in_array($a, $ids, true)) {
+            $ids[] = $a;
+        }
+        if (count($ids) >= 20) break; // hard cap
+    }
+}
+
+$placeholders = implode(',', array_fill(0, count($ids), '?'));
 $stmt = db()->prepare(
     'SELECT id, parent_id, author_name, body, created_at
-     FROM comments WHERE page_id = ? AND status = ? ORDER BY created_at ASC'
+     FROM comments WHERE page_id IN (' . $placeholders . ') AND status = ? ORDER BY created_at ASC'
 );
-$stmt->execute([$page, 'approved']);
+$stmt->execute(array_merge($ids, ['approved']));
 $rows = $stmt->fetchAll();
 
 // Escape on output (XSS defense) and index by id.

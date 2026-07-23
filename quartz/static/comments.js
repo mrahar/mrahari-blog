@@ -9,11 +9,50 @@
   // Override for local testing: set window.SELF_COMMENTS_API before this script loads.
   var API_BASE = (typeof window !== "undefined" && window.SELF_COMMENTS_API) || "/comment-api"
 
+  // Page addresses this note answers to: canonical slug first, then any aliases
+  // (old slugs). Injected by Head as a <meta name="comment-slugs"> (newline-list).
+  function commentSlugs() {
+    var meta = document.querySelector('meta[name="comment-slugs"]')
+    if (!meta || !meta.content) return []
+    return meta.content
+      .split("\n")
+      .map(function (s) {
+        return s.trim()
+      })
+      .filter(Boolean)
+  }
+
+  // The canonical page_id new comments are stored under.
   function pageId() {
+    var slugs = commentSlugs()
+    if (slugs.length) return "/" + slugs[0]
+    // Fallback for pages without the meta: derive from the URL (old behaviour).
     var p = window.location.pathname
     p = p.replace(/index\.html$/, "").replace(/\.html$/, "")
     if (p.length > 1 && p.charAt(p.length - 1) === "/") p = p.slice(0, -1)
     return p || "/"
+  }
+
+  // Every page_id variant to read comments from: canonical + aliases, each in raw
+  // and percent-encoded form (so comments left under an old Persian URL still show).
+  function relatedIds() {
+    var slugs = commentSlugs()
+    if (!slugs.length) return [pageId()]
+    var ids = []
+    function add(v) {
+      if (ids.indexOf(v) === -1) ids.push(v)
+    }
+    slugs.forEach(function (s) {
+      add("/" + s)
+      add(
+        "/" +
+          s
+            .split("/")
+            .map(encodeURIComponent)
+            .join("/"),
+      )
+    })
+    return ids
   }
 
   function shamsi(dateStr) {
@@ -170,7 +209,12 @@
   }
 
   function loadInto(listEl, pid) {
-    fetch(API_BASE + "/get.php?page_id=" + encodeURIComponent(pid))
+    var qs = "page_id=" + encodeURIComponent(pid)
+    var aliases = relatedIds().filter(function (x) {
+      return x !== pid
+    })
+    if (aliases.length) qs += "&aliases=" + encodeURIComponent(aliases.join("\n"))
+    fetch(API_BASE + "/get.php?" + qs)
       .then(function (r) {
         return r.json()
       })
