@@ -2,7 +2,7 @@ import { createRequire } from 'module';
 
 createRequire(import.meta.url);
 
-// src/util/lang.ts
+// node_modules/@quartz-community/utils/dist/lang.js
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
