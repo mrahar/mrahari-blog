@@ -241,7 +241,16 @@
         for (var i = 0; i < res.comments.length; i++) {
           listEl.appendChild(renderComment(res.comments[i], pid, 0))
         }
-        // Comments render async, so honour a #comment-<id> hash only after they exist.
+        // Comments render async, so scroll only after they exist. A pending
+        // cross-page click wins; otherwise honour a #comment-<id> hash in the URL.
+        if (pendingCommentId != null) {
+          var target = document.getElementById("comment-" + pendingCommentId)
+          pendingCommentId = null
+          if (target) {
+            scrollToComment(target)
+            return
+          }
+        }
         scrollToHashComment()
       })
       .catch(function () {
@@ -271,21 +280,49 @@
     scrollToComment(document.getElementById(h.slice(1)))
   }
 
-  // Wire a recent-comment link so a click on THIS page never triggers a GET
-  // navigation / full page rebuild (which makes the page "jump"). Same-page:
-  // handle it entirely client-side (smooth scroll + hash update) and stop the
-  // event before Quartz's SPA router sees it. Other page: leave it to Quartz.
+  // A same-origin URL for a stored page_id, hardened against odd values (empty,
+  // missing leading slash, or "//x" which new URL() would read as cross-origin
+  // and make the browser do a full GET reload).
+  function safeLocalUrl(pageId) {
+    var path = String(pageId || "/")
+    if (path.charAt(0) !== "/") path = "/" + path
+    path = path.replace(/^\/{2,}/, "/") // collapse leading slashes
+    return new URL(path, window.location.origin)
+  }
+
+  // Remembered target for a cross-page jump: loadInto() scrolls to it once the
+  // destination page's comments have finished loading async.
+  var pendingCommentId = null
+
+  // Wire a recent-comment link so a click NEVER triggers a full-page GET reload
+  // (the "white flash" / jump). We handle every primary click ourselves:
+  //  - same page  -> smooth in-page scroll + hash update, no navigation
+  //  - other page -> Quartz SPA navigation (never a full reload), then scroll
+  // preventDefault stops the browser's default GET; stopPropagation keeps
+  // Quartz's own window-level click handler out of it.
   function attachRecentClick(a, pageId, id) {
     a.addEventListener("click", function (ev) {
       // let the browser open in a new tab on modified / non-primary clicks
       if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return
-      if (normPath(pageId) !== normPath(window.location.pathname)) return
       ev.preventDefault()
-      ev.stopPropagation() // keep Quartz's window-level click handler out of it
-      if (window.history && window.history.pushState) {
-        window.history.pushState(null, "", "#comment-" + id)
+      ev.stopPropagation()
+      var hash = "comment-" + id
+      if (normPath(pageId) === normPath(window.location.pathname)) {
+        if (window.history && window.history.pushState) {
+          window.history.pushState(null, "", "#" + hash)
+        }
+        scrollToComment(document.getElementById(hash))
+        return
       }
-      scrollToComment(document.getElementById("comment-" + id))
+      // different page: go via Quartz's SPA router, then scroll after load
+      pendingCommentId = id
+      var dest = safeLocalUrl(pageId)
+      dest.hash = hash
+      if (typeof window.spaNavigate === "function") {
+        window.spaNavigate(dest)
+      } else {
+        window.location.assign(dest.toString())
+      }
     })
   }
 
