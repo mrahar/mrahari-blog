@@ -55,6 +55,19 @@
     return ids
   }
 
+  // Normalise a path for same-page comparison: decode Persian percent-encoding,
+  // drop index.html/.html and a trailing slash. Lets us tell "this very page" from
+  // "another page" regardless of encoding/slash differences.
+  function normPath(p) {
+    if (!p) return "/"
+    try {
+      p = decodeURIComponent(p)
+    } catch (e) {}
+    p = p.replace(/index\.html$/, "").replace(/\.html$/, "")
+    if (p.length > 1 && p.charAt(p.length - 1) === "/") p = p.slice(0, -1)
+    return p || "/"
+  }
+
   function shamsi(dateStr) {
     try {
       var d = new Date(dateStr.replace(" ", "T"))
@@ -237,12 +250,8 @@
       })
   }
 
-  // If the URL points at a specific comment (e.g. from "آخرین دیدگاه‌ها"),
-  // scroll to it and flash a highlight so it's easy to spot.
-  function scrollToHashComment() {
-    var h = window.location.hash
-    if (!/^#comment-\d+$/.test(h)) return
-    var target = document.getElementById(h.slice(1))
+  // Smooth-scroll to a comment node and flash a highlight so it's easy to spot.
+  function scrollToComment(target) {
     if (!target) return
     target.scrollIntoView({ behavior: "smooth", block: "center" })
     target.classList.remove("sc-highlight")
@@ -252,6 +261,32 @@
     setTimeout(function () {
       target.classList.remove("sc-highlight")
     }, 2600)
+  }
+
+  // If the URL points at a specific comment (e.g. from "آخرین دیدگاه‌ها"),
+  // scroll to it. Covers async load, hashchange, and back/forward.
+  function scrollToHashComment() {
+    var h = window.location.hash
+    if (!/^#comment-\d+$/.test(h)) return
+    scrollToComment(document.getElementById(h.slice(1)))
+  }
+
+  // Wire a recent-comment link so a click on THIS page never triggers a GET
+  // navigation / full page rebuild (which makes the page "jump"). Same-page:
+  // handle it entirely client-side (smooth scroll + hash update) and stop the
+  // event before Quartz's SPA router sees it. Other page: leave it to Quartz.
+  function attachRecentClick(a, pageId, id) {
+    a.addEventListener("click", function (ev) {
+      // let the browser open in a new tab on modified / non-primary clicks
+      if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return
+      if (normPath(pageId) !== normPath(window.location.pathname)) return
+      ev.preventDefault()
+      ev.stopPropagation() // keep Quartz's window-level click handler out of it
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, "", "#comment-" + id)
+      }
+      scrollToComment(document.getElementById("comment-" + id))
+    })
   }
 
   // The landing page must never show comments.
@@ -327,6 +362,7 @@
           var a = el("a", "sc-recent-link")
           // Link straight to the exact comment (anchor handled by scrollToHashComment).
           a.href = c.page_id + (c.id ? "#comment-" + c.id : "") // absolute path from site root
+          if (c.id) attachRecentClick(a, c.page_id, c.id) // smooth same-page scroll, no jump
           a.appendChild(el("span", "sc-recent-author", c.author_name)) // pre-escaped
           a.appendChild(document.createTextNode(" در "))
           var t = el("span", "sc-recent-post")
@@ -366,6 +402,8 @@
   }
 
   document.addEventListener("nav", init)
+  // Back/forward or a manually-changed hash should also land on the comment.
+  window.addEventListener("hashchange", scrollToHashComment)
   if (document.readyState !== "loading") {
     init()
   } else {
