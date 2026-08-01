@@ -111,7 +111,7 @@ export default (() => {
             const slugs = [fileData.slug, ...aliases].filter(Boolean) as string[]
             return <meta name="comment-slugs" content={slugs.join("\n")} />
           })()}
-        <script src={commentsJsPath} defer></script>
+        <script src={commentsJsPath} defer data-persist></script>
         <script src={homeGlowJsPath} defer></script>
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
