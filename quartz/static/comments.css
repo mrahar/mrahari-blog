@@ -181,12 +181,23 @@
   box-shadow: 0 0 0 3px var(--highlight);
 }
 
-/* honeypot: hide from humans without display:none */
+/* honeypot: hide from humans without display:none.
+   NOTE: never use `left: -9999px` here — on an RTL page, if the field's
+   containing block is not positioned (e.g. after an SPA transition drops the
+   transform), the negative offset stretches the document ~10000px wide and
+   pushes all content off-screen (blank page). This clip technique hides it
+   with zero layout footprint regardless of containing block or direction. */
 .sc-hp {
   position: absolute;
-  left: -9999px;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
 }
