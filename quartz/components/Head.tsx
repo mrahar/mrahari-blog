@@ -29,6 +29,8 @@ export default (() => {
     const commentsCssPath = joinSegments(baseDir, "static/comments.css")
     const commentsJsPath = joinSegments(baseDir, "static/comments.js")
     const homeGlowJsPath = joinSegments(baseDir, "static/home-glow.js")
+    const mobileMenuCssPath = joinSegments(baseDir, "static/mobile-menu.css")
+    const mobileMenuJsPath = joinSegments(baseDir, "static/mobile-menu.js")
 
     // Url of current page
     const socialUrl =
@@ -111,8 +113,10 @@ export default (() => {
             const slugs = [fileData.slug, ...aliases].filter(Boolean) as string[]
             return <meta name="comment-slugs" content={slugs.join("\n")} />
           })()}
+        <link rel="stylesheet" href={mobileMenuCssPath} />
         <script src={commentsJsPath} defer data-persist></script>
         <script src={homeGlowJsPath} defer></script>
+        <script src={mobileMenuJsPath} defer data-persist></script>
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
 
