@@ -20,7 +20,7 @@ ErrorDocument 404 /404.html
   # Our hand-written static scripts keep a FIXED name (no content hash), so they must
   # revalidate — otherwise a rebuild never reaches browsers that cached the old copy.
   # This runs after the rule above and overrides it for just these files.
-  <FilesMatch "^(comments|home-glow)\.(js|css)$">
+  <FilesMatch "^(comments|home-glow|mobile-menu)\.(js|css)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 </IfModule>
