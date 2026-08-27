@@ -1,8 +1,8 @@
-/* Mobile hamburger navigation drawer — styles.
-   Everything here is mobile-only (max-width 800px). On desktop the toggle button
-   and the drawer/backdrop are fully hidden, so the existing sidebar is untouched. */
+/* Mobile hamburger drawer + shared social row + mobile footer — styles.
+   The drawer/toggle/backdrop are mobile-only (<=800px). The footer social row is
+   shown on every viewport; the relocated recent-comments block is mobile-only. */
 
-/* --- hamburger toggle button (lives inside .sidebar.left toolbar row) --- */
+/* ============ hamburger toggle (inside .sidebar.left toolbar row) ============ */
 .mobile-menu-toggle {
   display: none;
   align-items: center;
@@ -18,14 +18,13 @@
 .mobile-menu-toggle:hover {
   color: var(--secondary);
 }
-
 @media all and (max-width: 800px) {
   .mobile-menu-toggle {
     display: inline-flex;
   }
 }
 
-/* --- backdrop --- */
+/* ============ backdrop ============ */
 .mobile-menu-backdrop {
   position: fixed;
   inset: 0;
@@ -42,20 +41,20 @@
   visibility: visible;
 }
 
-/* --- drawer (slides in from the right for RTL) --- */
+/* ============ drawer (slides in from the right for RTL) ============ */
 .mobile-menu-drawer {
   position: fixed;
   top: 0;
   right: 0;
   height: 100dvh;
-  width: min(78vw, 320px);
+  width: min(86vw, 360px);
   background: var(--light);
   border-left: 1px solid var(--lightgray);
   box-shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
   transform: translateX(100%);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
-  padding: 1.2rem 1rem;
+  padding: 2.4rem 1.1rem 1.4rem;
   box-sizing: border-box;
   overflow-y: auto;
   direction: rtl;
@@ -64,19 +63,13 @@
   transform: translateX(0);
 }
 
-.mobile-menu-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  font-weight: 900;
-  font-size: 1.05rem;
-  color: var(--dark);
-}
 .mobile-menu-close {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.7rem;
   background: transparent;
   border: none;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   line-height: 1;
   cursor: pointer;
   color: var(--gray);
@@ -86,9 +79,29 @@
   color: var(--secondary);
 }
 
+/* logo + divider */
+.mm-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+}
+.mm-logo img {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+}
+.mm-divider {
+  height: 3px;
+  width: 60px;
+  margin: 0 auto 1rem;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--secondary), var(--tertiary));
+}
+
+/* menu links (RTL, full-width rows with separators — like the reference) */
 .mobile-menu-list {
   list-style: none;
-  margin: 0;
+  margin: 0.4rem 0 0;
   padding: 0;
 }
 .mobile-menu-list li {
@@ -96,21 +109,120 @@
 }
 .mobile-menu-list a {
   display: block;
-  padding: 0.85rem 0.6rem;
-  border-radius: 10px;
-  font-size: 1.02rem;
-  font-weight: 600;
-  color: var(--darkgray);
+  padding: 0.95rem 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--dark);
   text-decoration: none;
+  text-align: right;
   border-bottom: 1px solid var(--lightgray);
 }
 .mobile-menu-list a:hover,
 .mobile-menu-list a:active {
-  background: color-mix(in srgb, var(--secondary) 10%, transparent);
   color: var(--secondary);
 }
 .mobile-menu-list li:last-child a {
   border-bottom: none;
+}
+
+/* ============ shared social row (drawer + footer) ============ */
+.social-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0.3rem 0 1.1rem;
+}
+.mm-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--darkgray);
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+.mm-social:hover {
+  color: var(--secondary);
+  transform: translateY(-2px);
+}
+.mm-social svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* ============ footer extras ============ */
+.footer-extra {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+.footer-extra .social-row {
+  margin: 0.4rem 0 0.2rem;
+}
+.footer-recent-host {
+  width: 100%;
+}
+
+/* recent-comments block when relocated into the footer (mobile) */
+footer .sc-recent {
+  display: block;
+  text-align: center;
+  max-width: 540px;
+  margin: 0 auto 0.6rem;
+}
+footer .sc-recent-heading {
+  font-size: 1rem;
+  font-weight: 900;
+  margin: 0 0 0.6rem;
+  color: var(--dark);
+}
+footer .sc-recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+footer .sc-recent-item {
+  margin: 0.4rem 0;
+}
+footer .sc-recent-link {
+  font-size: 0.9rem;
+}
+
+/* ============ email-copied toast ============ */
+.mm-toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%) translateY(18px);
+  background: var(--dark);
+  color: var(--light);
+  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  z-index: 1100;
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.mm-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* lock background scroll while the drawer is open */

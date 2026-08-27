@@ -158,6 +158,34 @@ div.search.mobile-only {
   button.search-button > p {
     display: none;
   }
+
+  /* search: drop the bordered "pill" so it matches the plain reader/darkmode
+     icons and sits on the same baseline (was misaligned/too tall on mobile) */
+  div.search.mobile-only {
+    padding-right: 0 !important;
+  }
+  .search button.search-button {
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .search button.search-button > svg {
+    width: 22px;
+    height: 22px;
+  }
+  /* keep every toolbar control vertically centered on the row */
+  .sidebar.left .search,
+  .sidebar.left .darkmode,
+  .sidebar.left .readermode,
+  .sidebar.left .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 /* code is always LTR */
