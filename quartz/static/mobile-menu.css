@@ -172,33 +172,12 @@
 }
 .footer-recent-host {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-/* recent-comments block when relocated into the footer (mobile) */
-footer .sc-recent {
-  display: block;
-  text-align: center;
-  max-width: 540px;
-  margin: 0 auto 0.6rem;
-}
-footer .sc-recent-heading {
-  font-size: 1rem;
-  font-weight: 900;
-  margin: 0 0 0.6rem;
-  color: var(--dark);
-}
-footer .sc-recent-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-footer .sc-recent-item {
-  margin: 0.4rem 0;
-}
-footer .sc-recent-link {
-  font-size: 0.9rem;
-}
+/* the recent-comments card itself (visual look) lives in custom.scss §3.97,
+   shared with the backlinks card so the two bottom blocks match. */
 
 /* ============ email-copied toast ============ */
 .mm-toast {
