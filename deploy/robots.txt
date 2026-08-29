@@ -1,0 +1,10 @@
+# robots.txt — blog.mrahari.com
+# Allow all crawlers, point them to the sitemap.
+
+User-agent: *
+Allow: /
+
+# Server-side comment backend (PHP endpoints) — not content, keep out of the index
+Disallow: /comment-api/
+
+Sitemap: https://blog.mrahari.com/sitemap.xml

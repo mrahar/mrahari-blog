@@ -30,6 +30,9 @@ jobs:
       - name: Add .htaccess to build output
         run: cp deploy/.htaccess public/.htaccess
 
+      - name: Add robots.txt to build output
+        run: cp deploy/robots.txt public/robots.txt
+
       - name: Upload to blog.mrahari.com via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

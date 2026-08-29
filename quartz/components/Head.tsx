@@ -41,6 +41,76 @@ export default (() => {
     )
     const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
 
+    // --- SEO framework: canonical, locale, structured data (JSON-LD) ---
+    const localeUnderscore = (cfg.locale ?? "fa-IR").replace("-", "_")
+    const isHome = fileData.slug === "index"
+    const isPost = !isHome && fileData.slug !== "404" && !!fileData.dates
+    const authorName = cfg.pageTitle
+    const siteUrl = url.toString().replace(/\/$/, "")
+    // Home is served at "/", not "/index"; 404 has no canonical URL of its own.
+    const canonicalUrl = isHome
+      ? `${siteUrl}/`
+      : fileData.slug === "404"
+        ? url.toString()
+        : socialUrl
+    // Prefer the per-page OG image (emitted as `<slug>-og-image.webp`) over the static default.
+    const ogImage =
+      usesCustomOgImage && fileData.slug
+        ? `https://${cfg.baseUrl}/${fileData.slug}-og-image.webp`
+        : ogImageDefaultPath
+    const datePublished = fileData.dates?.created?.toISOString()
+    const dateModified = fileData.dates?.modified?.toISOString()
+    const person = { "@type": "Person", name: authorName, url: siteUrl }
+    const structuredData = isHome
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              name: cfg.pageTitle,
+              url: siteUrl,
+              inLanguage: cfg.locale ?? "fa-IR",
+              description,
+            },
+            person,
+          ],
+        }
+      : isPost
+        ? {
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BlogPosting",
+                headline: title,
+                description,
+                url: canonicalUrl,
+                mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+                inLanguage: cfg.locale ?? "fa-IR",
+                image: ogImage,
+                author: person,
+                publisher: person,
+                ...(datePublished ? { datePublished } : {}),
+                ...(dateModified ? { dateModified } : {}),
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "خانه", item: `${siteUrl}/` },
+                  { "@type": "ListItem", position: 2, name: title, item: canonicalUrl },
+                ],
+              },
+            ],
+          }
+        : {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: title,
+            description,
+            url: canonicalUrl,
+            inLanguage: cfg.locale ?? "fa-IR",
+            isPartOf: { "@type": "WebSite", name: cfg.pageTitle, url: siteUrl },
+          }
+
     const coreStylesheet = css[0]?.content
     const coreScript = js.find(
       (r) => r.loadTime === "beforeDOMReady" && r.contentType === "external",
@@ -67,9 +137,10 @@ export default (() => {
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <meta name="og:site_name" content={cfg.pageTitle}></meta>
+        <meta property="og:site_name" content={cfg.pageTitle}></meta>
         <meta property="og:title" content={title} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={isPost ? "article" : "website"} />
+        <meta property="og:locale" content={localeUnderscore} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
@@ -91,10 +162,26 @@ export default (() => {
         {cfg.baseUrl && (
           <>
             <meta property="twitter:domain" content={cfg.baseUrl}></meta>
-            <meta property="og:url" content={socialUrl}></meta>
-            <meta property="twitter:url" content={socialUrl}></meta>
+            <meta property="og:url" content={canonicalUrl}></meta>
+            <meta property="twitter:url" content={canonicalUrl}></meta>
           </>
         )}
+
+        {/* SEO framework: canonical + article meta + robots + structured data */}
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="theme-color" content="#0A72BD" />
+        {isPost && datePublished && (
+          <meta property="article:published_time" content={datePublished} />
+        )}
+        {isPost && dateModified && (
+          <meta property="article:modified_time" content={dateModified} />
+        )}
+        {isPost && <meta property="article:author" content={authorName} />}
+        {fileData.slug === "404" && <meta name="robots" content="noindex, follow" />}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
 
         <link rel="icon" href={iconPath} />
         <link rel="stylesheet" href={commentsCssPath} />
