@@ -13,7 +13,7 @@ configuration:
     - templates
     - .obsidian
   theme:
-    fontOrigin: googleFonts
+    fontOrigin: local
     cdnCaching: true
     typography:
       header: Vazirmatn
@@ -120,7 +120,7 @@ plugins:
     enabled: true
     options:
       useThemeFonts: false
-      fontOrigin: googleFonts
+      fontOrigin: local
       title:
         name: Vazirmatn
         weights: [400, 700, 900]

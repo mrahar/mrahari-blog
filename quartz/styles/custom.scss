@@ -1,5 +1,21 @@
 @use "./variables.scss" as *;
 
+// Self-hosted fonts — no dependency on Google Fonts (works during international internet outages)
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/static/fonts/Vazirmatn-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/static/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ============================================================
    Baran brand — mrahari.com
    RTL/Persian base adapted from eledah/quartz (MIT),
