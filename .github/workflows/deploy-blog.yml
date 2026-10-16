@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: FTP_SERVER # same environment as main deploy
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -34,7 +34,7 @@ jobs:
         run: cp deploy/robots.txt public/robots.txt
 
       - name: Upload to blog.mrahari.com via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -47,7 +47,7 @@ jobs:
       # but we exclude them explicitly so the deploy can never overwrite the
       # server-side config that holds the DB credentials.
       - name: Upload comment-api via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
